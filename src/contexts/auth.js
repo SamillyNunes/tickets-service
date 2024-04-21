@@ -4,6 +4,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from '../services/firebaseConnection';
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext({});
 
@@ -40,6 +41,7 @@ function AuthProvider({children}){
                 setUser(data);
                 storeUser(data);
                 setLoadingAuth(false);
+                toast.success('Seja bem-vindo(a) ao sistema!');
                 navigate("/dashboard");
             });
             
