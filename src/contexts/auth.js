@@ -3,12 +3,15 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from '../services/firebaseConnection';
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext({});
 
 function AuthProvider({children}){
     const [user, setUser] = useState(null);
     const [loadingAuth, setLoadingAuth] = useState(false);
+
+    const navigate = useNavigate();
 
     function signIn(email, password){
         console.log(`Email: ${email}, Pass: ${password}`)
@@ -35,14 +38,20 @@ function AuthProvider({children}){
                 };
 
                 setUser(data);
+                storeUser(data);
+                setLoadingAuth(false);
+                navigate("/dashboard");
             });
             
-            setLoadingAuth(false);
         })
         .catch(error => {
             console.log(error);
             setLoadingAuth(false);
         });
+    }
+
+    function storeUser(data){
+        localStorage.setItem("supportpro@user", JSON.stringify(data));
     }
 
     return (
