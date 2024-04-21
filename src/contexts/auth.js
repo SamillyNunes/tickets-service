@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from '../services/firebaseConnection';
@@ -14,9 +14,34 @@ function AuthProvider({children}){
 
     const navigate = useNavigate();
 
-    function signIn(email, password){
-        console.log(`Email: ${email}, Pass: ${password}`)
-        alert('Logado!');
+    async function signIn(email, password){
+        setLoadingAuth(true);
+
+        await signInWithEmailAndPassword(auth, email, password)
+        .then(async (value)=>{
+            let uid = value.user.uid;
+            
+            const docRef = doc(db, "users", uid);
+            await getDoc(docRef)
+            .then( (v)=> {
+                let data = {
+                    uid: uid,
+                    name: v.data().name,
+                    email: value.user.email,
+                    avatarUrl: null,
+                };
+
+                setUser(data);
+                storeUser(data);
+                setLoadingAuth(false);
+                toast.success('Seja bem-vindo(a) ao sistema!');
+                navigate("/dashboard");
+            });
+        })
+        .catch(error => {
+            toast.error('Ops! Um erro aconteceu');
+            setLoadingAuth(false);
+        });
     }
 
     async function signUp(name, email, password){
