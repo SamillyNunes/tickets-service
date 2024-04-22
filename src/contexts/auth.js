@@ -11,8 +11,23 @@ export const AuthContext = createContext({});
 function AuthProvider({children}){
     const [user, setUser] = useState(null);
     const [loadingAuth, setLoadingAuth] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        async function loadUser(){
+            const storedUser = localStorage.getItem('supportpro@user');
+
+            if(storedUser){
+                setUser(JSON.parse(storedUser));
+            }
+
+            setLoading(false);
+        }
+
+        loadUser();
+    },[]);
 
     async function signIn(email, password){
         setLoadingAuth(true);
@@ -88,6 +103,7 @@ function AuthProvider({children}){
             signIn,
             signUp,
             loadingAuth,
+            loading,
         }} >
             {children}
         </AuthContext.Provider>
