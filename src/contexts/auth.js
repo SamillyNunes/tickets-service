@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { auth, db } from '../services/firebaseConnection';
@@ -96,12 +96,19 @@ function AuthProvider({children}){
         localStorage.setItem("supportpro@user", JSON.stringify(data));
     }
 
+    async function logout(){
+        await signOut(auth);
+        localStorage.removeItem('supportpro@user');
+        setUser(null);
+    }
+
     return (
         <AuthContext.Provider value={{
             signed: !!user, // esses dois !! indicam um boleaano onde, caso user eh nulo, sera falso, e o contrario verdadeiro
             user,
             signIn,
             signUp,
+            logout,
             loadingAuth,
             loading,
         }} >
