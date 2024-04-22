@@ -6,12 +6,31 @@ import Header from '../../components/Header';
 import Title from '../../components/Title';
 import './profile.css';
 import avatarImg from '../../assets/avatar.png'
+import { toast } from 'react-toastify';
 
 export default function Profile(){
 
-    const { user } = useContext(AuthContext);
+    const { user, storeUser, setUser, logout } = useContext(AuthContext);
 
     const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
+    const [name, setName] = useState(user && user.name);
+    const [email, setEmail] = useState(user && user.email);
+
+    const [fileAvatar, setFileAvatar] = useState(null);
+
+    function handleFile(e){
+        const image = e.target.files[0];
+        if(image){
+            if(image.type==='image/jpeg' || image.type==='image/png'){
+                setFileAvatar(image);
+                setAvatarUrl(URL.createObjectURL(image));
+            } else {
+                toast.warning('Envie uma imagem PNG ou JPEG');
+                setFileAvatar(null);
+                return;
+            }
+        }
+    }
 
     return (
         <div>
@@ -31,7 +50,7 @@ export default function Profile(){
                                 <FiUpload size={25} color='#FFF' />
                             </span>
 
-                            <input type='file' accept='image/*' /> <br/>
+                            <input type='file' accept='image/*' onChange={handleFile} /> <br/>
                             
                             <img src={avatarUrl===null ? avatarImg : avatarUrl} alt='Foto de perfil' width={200} height={200} />
 
@@ -39,10 +58,10 @@ export default function Profile(){
                         </label>
 
                         <label>Nome</label>
-                        <input type='text' placeholder='Seu nome' />
+                        <input type='text' value={name} onChange={(e)=>setName(e.target.value)} />
 
                         <label>Email</label>
-                        <input type='email' placeholder='test@test.com' disabled={true} />
+                        <input type='email' value={email} disabled={true} />
                         
                         <button type='submit' >Salvar</button>
                     </form>
@@ -50,7 +69,7 @@ export default function Profile(){
                 </div>
 
                 <div className='container'>
-                    <button className='logout-btn' >Sair</button>
+                    <button className='logout-btn' onClick={()=> logout()} >Sair</button>
                 </div>
 
             </div>
