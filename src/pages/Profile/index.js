@@ -1,7 +1,10 @@
 import { FiSettings, FiUpload } from 'react-icons/fi';
 import { useContext, useState } from 'react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { AuthContext } from '../../contexts/auth';
+import { db, storageDb } from '../../services/firebaseConnection';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import './profile.css';
@@ -32,6 +35,58 @@ export default function Profile(){
         }
     }
 
+    async function handleUpload(){
+        const currentUid = user.uid;
+        
+        // fileAvatar.name eh o nome que tem na foto nos arquivos
+        const uploadref = ref(storageDb, `images/${currentUid}`);
+
+        uploadBytes(uploadref, fileAvatar).then((snapshot)=>{
+
+            getDownloadURL(snapshot.ref).then(async (downloadURL)=>{
+
+                const docRef = doc(db, "users", currentUid);
+                await updateDoc(docRef, {
+                    avatarUrl: downloadURL,
+                    name: name,
+                }).then(()=>{
+                    let data = {
+                        ...user,
+                        name: name,
+                        avatarUrl: downloadURL,    
+                    }
+                    setUser(data);
+                    storeUser(data);
+                    toast.success('Informações atualizadas com sucesso!');
+                });
+            })
+        });
+    }
+
+    async function handleSaving(e){
+        e.preventDefault();
+        
+        // Quer dizer que n enviou nenhuma foto
+        if(fileAvatar===null && name!==''){
+            //Atualizar apenas o nome do user
+            const docRef = doc(db, "users", user.uid);
+            await updateDoc(docRef,{
+                name: name
+            }).then(()=>{
+                let data = {
+                    ...user,
+                    name: name,
+                }
+                setUser(data);
+                storeUser(data);
+                toast.success('Informações atualizadas com sucesso!');
+            });
+        } else if(name!=='' && fileAvatar!==null){
+            // Atualizar nome e foto
+            handleUpload();
+        }
+    }
+
     return (
         <div>
             <Header/>
@@ -43,7 +98,7 @@ export default function Profile(){
 
                 <div className='container' >
 
-                    <form className='form-profile' >
+                    <form className='form-profile' onSubmit={handleSaving} >
 
                         <label className='label-avatar' >
                             <span>
