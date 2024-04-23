@@ -1,18 +1,61 @@
+import { useState, useEffect, useContext } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
+import { collection, getDocs, getDoc, document } from 'firebase/firestore';
+
+import { AuthContext } from '../../contexts/auth';
+import { db } from '../../services/firebaseConnection';
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
 import './newcall.css';
-import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function NewCall(){
+    const { user } = useContext(AuthContext);
 
     const [customers, setCustomers] = useState([]);
+    const [loadingCustomers, setLoadingCustomers] = useState(true);
+    const [customerSelected, setCustomerSelected] = useState(0);
 
     const [complement, setComplement] = useState('');
     const [topic, setTopic] = useState('Suporte');
     const [status, setStatus] = useState('Aberto');
+
+    useEffect(()=>{
+        async function loadCustomers(){
+            const listRef = collection(db, "customers");
+            const querySnapshot = await getDocs(listRef)
+            .then((snapshot)=>{
+                let lista = [];
+
+                snapshot.forEach((d)=> {
+                    lista.push({
+                        id: d.id,
+                        companyName: d.data().companyName,
+                    });
+                });
+
+                if(snapshot.docs.size===0){
+                    toast.warning('Nenhuma empresa encontrada');
+                    
+                    setLoadingCustomers(false);
+                    setCustomers([]);
+                    return;
+                }
+
+                setCustomers(lista);
+                setLoadingCustomers(false);
+            })
+            .catch(error => {
+                toast.error('Erro ao buscar os clientes!');
+                setLoadingCustomers(false);
+                setCustomers([]);
+            });
+        }
+
+        loadCustomers();
+    },[]);
 
     function handleStatusOptionChanged(e){
         setStatus(e.target.value);
@@ -20,6 +63,10 @@ export default function NewCall(){
 
     function handleSelectChanged(e){
         setTopic(e.target.value);
+    }
+
+    function handleChangedCustomer(e){
+        setCustomerSelected(e.target.value);
     }
 
     return (
@@ -36,10 +83,19 @@ export default function NewCall(){
                     <form className='form-profile' >
 
                         <label>Clientes</label>
-                        <select>
-                            <option key={1} value={1} >Mercado teste</option>
-                            <option key={2} value={2} >Loja canarinhos</option>
-                        </select>
+                        {
+                            loadingCustomers ? (
+                                <input type='text' disabled={true} value='Carregando...' /> 
+                            ) : (
+                                <select value={customerSelected} onChange={handleChangedCustomer}>
+                                    {customers.map((item, index)=>{
+                                        return (
+                                            <option key={index} value={index} > {item.companyName} </option>
+                                        );
+                                    })}
+                                </select>
+                            )
+                        }
 
                         <label>Assunto</label>
                         <select value={topic} onChange={handleSelectChanged} >
