@@ -1,9 +1,12 @@
 import { FiUser } from 'react-icons/fi';
+import { addDoc, collection } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 import './customers.css'
 import { useState } from 'react';
+import { db } from '../../services/firebaseConnection';
 
 export default function Customers(){
 
@@ -11,10 +14,26 @@ export default function Customers(){
     const [cnpj, setCnpj] = useState('');
     const [address, setAddress] = useState('');
 
-    function handleRegister(e){
+    async function handleRegister(e){
         e.preventDefault();
 
-        alert('Teste');
+        if(companyName!=='' && cnpj!=='' && address!==''){
+            const docRef = collection(db, "customers");
+            await addDoc(docRef, {
+                companyName: companyName,
+                cnpj: cnpj,
+                address: address
+            }).then(()=>{
+                setCompanyName('');
+                setCnpj('');
+                setAddress('');
+                toast.success('Cadastrado com sucesso!');
+            }).catch(error => {
+                toast.error('Erro ao fazer cadastro.');
+            });
+        } else {
+            toast.warning('Preencha todos os campos!');
+        }
     }
 
     return (
@@ -33,6 +52,7 @@ export default function Customers(){
                         <input 
                             type='text' 
                             placeholder='Nome da empresa' 
+                            value={companyName}
                             onChange={(e)=> setCompanyName(e.target.value)} 
                         />
 
@@ -40,6 +60,7 @@ export default function Customers(){
                         <input 
                             type='text' 
                             placeholder='Digite o CNPJ' 
+                            value={cnpj}
                             onChange={(e)=> setCnpj(e.target.value)} 
                         />
                         
@@ -47,6 +68,7 @@ export default function Customers(){
                         <input 
                             type='text' 
                             placeholder='Endereço da Empresa' 
+                            value={address}
                             onChange={(e)=> setAddress(e.target.value)} 
                         />
 
