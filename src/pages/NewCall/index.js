@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
-import { collection, getDocs, getDoc, document } from 'firebase/firestore';
+import { collection, getDocs, getDoc, document, addDoc } from 'firebase/firestore';
 
 import { AuthContext } from '../../contexts/auth';
 import { db } from '../../services/firebaseConnection';
@@ -69,6 +69,30 @@ export default function NewCall(){
         setCustomerSelected(e.target.value);
     }
 
+    async function handleRegister(e){
+        e.preventDefault();
+
+        //Registrar chamado
+        const docRef = collection(db, "calls");
+        await addDoc(docRef, {
+            created: new Date(),
+            customer: customers[customerSelected].companyName,
+            id: customers[customerSelected].id,
+            topic: topic,
+            complement: complement,
+            status: status,
+            userId: user.uid,
+        })
+        .then(()=>{
+            toast.success('Chamado registrado com sucesso!');
+            setComplement('');
+            setCustomerSelected(0);
+        })
+        .catch(error => {
+            toast.error('Ops! Erro ao registrar. Tente mais tarde.');
+        });
+    }
+
     return (
         <div>
             <Header/>
@@ -80,7 +104,7 @@ export default function NewCall(){
 
                 <div className='container' >
                     
-                    <form className='form-profile' >
+                    <form className='form-profile' onSubmit={handleRegister} >
 
                         <label>Clientes</label>
                         {
