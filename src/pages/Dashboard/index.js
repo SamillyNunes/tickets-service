@@ -59,6 +59,25 @@ export default function Dashboard(){
         }
     }
 
+    if(loading){
+        return (
+            <div>
+                <Header />
+                <div className="content" >
+                    
+                    <Title name="Chamados" >
+                        <FiMessageSquare/>
+                    </Title>
+
+                    <div className="container dashboard">
+                        <span>Buscando chamados...</span>
+                    </div>
+
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <Header />
