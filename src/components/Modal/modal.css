@@ -63,3 +63,8 @@
     white-space: pre-wrap; 
     line-height: 150%;
 }
+
+.status-badge{
+    margin-left: 5px;
+    border-radius: 2px;
+}
