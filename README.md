@@ -1,8 +1,36 @@
-# Getting Started with Create React App
+# Tickets Service
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This system goals to register tickets service and keep its information inside a dashboard. Created while studying ReactJs topics. It has Firebase integration. You can find it deployed in https://servicetickets.netlify.app/
 
-## Available Scripts
+Sistema que realiza o cadastro de chamados de serviço e mantém suas informações em uma dashboard completa. Criado para fins de estudo e prática dos conceitos de Reactjs. Possui integração com o Firebase para fins da autenticação e armazenamento.
+
+## Summary
+1. [Intro](#tickets-service)
+2. [Features and screenshots](#features-and-screenshots)
+3. [Requirements and installing](#requirements-and-installing)
+4. [Credits](#credits)
+
+## Features and screenshots
+
+- Login and Sign up
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/cadastro.png" alt="Cadastro" width=500 />
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/login.png" alt="Login" width=500 />
+
+- Dashboard
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/dashboard.png" alt="Dashboard" width=500 />
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/novo-chamado.png" alt="Novo chamado" width=500 />
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/modal.png" alt="Informações do chamado" width=500 />
+
+- Perfil
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/ajustes-perfil.png" alt="Ajustes do perfil" width=500 />
+
+- Clientes
+<img src="https://github.com/SamillyNunes/tickets-service/blob/main/readme-imgs/novo-cliente.png" alt="Novo cliente" width=500 />
+
+
+## Requirements and installing
+
+To execute this project it's necessary having NodeJs installed in your machine. You can read more about it [here](https://react.dev/learn/installation).
 
 In the project directory, you can run:
 
@@ -24,47 +52,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Credits
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This project had been developed during [this course](https://www.udemy.com/course/curso-reactjs). 
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
