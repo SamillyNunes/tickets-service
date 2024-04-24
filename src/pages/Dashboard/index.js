@@ -9,6 +9,7 @@ import { AuthContext } from "../../contexts/auth";
 import Header from "../../components/Header";
 import './dashboard.css';
 import Title from "../../components/Title";
+import Modal from "../../components/Modal";
 
 export default function Dashboard(){
     
@@ -170,6 +171,7 @@ export default function Dashboard(){
                     
                 </>
             </div>
+            <Modal />
         </div>
     );
 }
