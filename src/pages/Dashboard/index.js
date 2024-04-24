@@ -15,11 +15,14 @@ export default function Dashboard(){
     const [calls, setCalls] = useState([]);
     const [isCallsListEmpty, setIsCallsListEmpty] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [lastCall, setLastCall] = useState();
+    const [loadingMore, setLoadingMore] = useState(false);
+
 
     useEffect(()=> {
         async function loadCalls(){
             const listRef = collection(db, "calls");    
-            const q = query(listRef, orderBy('created', 'desc'), limit(10));
+            const q = query(listRef, orderBy('created', 'desc'), limit(5));
 
             const querySnapshot = await getDocs(q);
             await updateState(querySnapshot);
@@ -54,9 +57,22 @@ export default function Dashboard(){
             });
 
             setCalls(calls=> [...calls, ...lista]);
+            // Pgeando o ultimo item:
+            const lastDoc = querySnapshot.docs[querySnapshot.docs.length-1];
+            setLastCall(lastDoc);
         } else {
             setIsCallsListEmpty(true);
         }
+        setLoadingMore(false);
+    }
+
+    async function handleSearchMore(){
+        setLoadingMore(true);
+        
+        const listRef = collection(db, "calls");    
+        const q = query(listRef, orderBy('created', 'desc'), startAfter(lastCall), limit(5));
+        const querySnapshot = await getDocs(q);
+        await updateState(querySnapshot);
     }
 
     if(loading){
@@ -140,6 +156,9 @@ export default function Dashboard(){
 
                                 </tbody>
                             </table>
+
+                            {loadingMore && <h3>Buscando mais chamados...</h3>}
+                            {!loadingMore && !isCallsListEmpty && <button onClick={handleSearchMore} className="btn-more" >Buscar mais</button>}
                         </>
                     )}
 
