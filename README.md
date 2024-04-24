@@ -1,4 +1,5 @@
 # Tickets Service
+<img src="https://img.shields.io/badge/Framework-ReactJS-blue" /> <img src="https://img.shields.io/badge/Language-Javascript-yellow" />
 
 This system goals to register tickets service and keep its information inside a dashboard. Created while studying ReactJs topics. It has Firebase integration. You can find it deployed in https://servicetickets.netlify.app/
 
